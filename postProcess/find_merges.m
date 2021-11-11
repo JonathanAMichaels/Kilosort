@@ -57,7 +57,8 @@ for j = 1:Nk
     end
     % sort all the pairs of this neuron, discarding any that have fewer spikes
     [ccsort, ix] = sort(Xsim(isort(j),:) .* (nspk'>numel(s1)), 'descend');
-    ienu = find(ccsort<.7, 1) - 1; % find the first pair which has too low of a correlation
+    % Should be ienu = find(ccsort<.7, 1) - 1; % find the first pair which has too low of a correlation
+    ienu = find(ccsort<.5, 1) - 1; % find the first pair which has too low of a correlation
 
     
     % for all pairs above 0.5 correlation
@@ -69,6 +70,8 @@ for j = 1:Nk
         R = min(rir); % R is the estimated probability that any of the center bins are refractory, and kicks in when there are very few spikes
 
         if flag
+            % Should be Q<.2 && R<.05 % if both refractory criteria are met
+            %if Q<1 % if both refractory criteria are met
             if Q<.2 && R<.05 % if both refractory criteria are met
                 i = ix(k);
                 % now merge j into i and move on
