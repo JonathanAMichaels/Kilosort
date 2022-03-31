@@ -16,7 +16,7 @@ NT       = ops.NT ; % number of timepoints per batch
 NchanTOT = ops.NchanTOT; % total number of channels in the raw binary file, including dead, auxiliary etc
 
 bytes       = get_file_size(ops.fbinary); % size in bytes of raw binary
-nTimepoints = floor(bytes/NchanTOT/2); % number of total timepoints
+nTimepoints = floor(bytes/NchanTOT/2); %floor(bytes/NchanTOT/2); % number of total timepoints
 ops.tstart  = ceil(ops.trange(1) * ops.fs); % starting timepoint for processing data segment
 ops.tend    = min(nTimepoints, ceil(ops.trange(2) * ops.fs)); % ending timepoint
 ops.sampsToRead = ops.tend-ops.tstart; % total number of samples to read
@@ -82,6 +82,7 @@ for ibatch = 1:Nbatch
     fseek(fid, offset, 'bof'); % fseek to batch start in raw file
 
     buff = fread(fid, [NchanTOT NTbuff], '*int16'); % read and reshape. Assumes int16 data (which should perhaps change to an option)
+    
     if isempty(buff)
         break; % this shouldn't really happen, unless we counted data batches wrong
     end
